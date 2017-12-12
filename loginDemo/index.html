@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+<meta name="viewport" content="width=device-width, initial-scale=1"> 
+<title>登录页</title>
+<link rel="stylesheet" type="text/css" href="css/normalize.css" />
+<link rel="stylesheet" type="text/css" href="css/demo.css" />
+<link rel="stylesheet" type="text/css" href="css/mimic.min.css" />
+
+<!--必要样式-->
+<link rel="stylesheet" type="text/css" href="css/component.css" />
+
+<link rel="stylesheet" type="text/css" href="css/testLogin.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-letterfx.css" />
+
+<!--[if IE]>
+<script src="js/html5.js"></script>
+<![endif]-->
+</head>
+<body>
+		<div class="container demo-1">
+			<div class="content">
+				<div id="large-header" class="large-header">
+					<canvas id="demo-canvas"></canvas>
+					<h1 class="main-title">MyItmes <span class="thin"> By Rex</span></h1>
+					<div class="lm-div">
+						<div class="lm-background boomerang" >
+							<div class='login_fields'>
+							    <div class='login_fields__user'>
+							      <div class='icon'>
+							        <img alt="" src='img/user_icon_copy.png'>
+							      </div>
+							      <input name="login" placeholder='Username' maxlength="16" type='text' autocomplete="off"/>
+							        <div class='validation'>
+							        </div>
+							    </div>
+							    <br />
+							    <div class='login_fields__password'>
+							      <div class='icon'>
+							        <img alt="" src='img/lock_icon_copy.png'>
+							      </div>
+							      <input name="pwd" placeholder='Password' maxlength="16" type='password' autocomplete="off">
+							      <div class='validation'>
+							      </div>
+							    </div>
+							    <br />
+							    <div class='login_fields__password'>
+							      <div class='icon'>
+							        <img alt="" src='img/key.png'>
+							      </div>
+							      <input name="code" placeholder='identifying code' maxlength="4" type='text' name="ValidateNum" autocomplete="off">
+								      <div class='validation' style="float: right;margin-top: 5px;">
+								          <canvas class="J_codeimg" id="myCanvas" onclick="Code();">对不起，您的浏览器不支持canvas，请下载最新版浏览器!</canvas>
+									  </div>
+							    </div>
+							    <div class='login_fields__submit'>
+							      <input type='button' value='L O G I N'>
+							    </div>
+						  </div>
+							
+						</div>
+						<!--
+                        	作者：REX
+                        	时间：2017-11-27
+                        	描述：登录过渡动画
+                        -->
+						<div class="la-ani" style="display: none;">
+							<h1 class="la-title">In Request, please later</h1>
+							<div class="progress">
+								<div class="progress-bar">
+									<div class="progress-shadow"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div><!-- /container -->
+		<script src="js/TweenLite.min.js"></script>
+		<script src="js/EasePack.min.js"></script>
+		<script src="js/rAF.js"></script>
+		<script src="js/demo-1.js"></script>
+		<script src="js/TweenLite.min.js"></script>
+		<script src="js/jquery-2.1.1.min.js"></script>
+		<script src="js/jquery-letterfx.js"></script>
+		<script type="text/javascript" src="js/prefixfree.min.js" ></script>
+		
+		<script>
+			$(".main-title").letterfx({"fx":"fall","words":true,"timing":200});
+			var canGetCookie = 0;//是否支持存储Cookie 0 不支持 1 支持
+			  Code();
+			    function Code() {
+					if(canGetCookie == 1){
+						createCode("AdminCode");
+						var AdminCode = getCookieValue("AdminCode");
+						showCheck(AdminCode);
+					}else{
+						showCheck(createCode(""));
+					}
+			    }
+			 function showCheck(a) {
+				CodeVal = a;
+		        var c = document.getElementById("myCanvas");
+		        var ctx = c.getContext("2d");
+		        ctx.clearRect(0, 0, 1000, 1000);
+		        ctx.font = "80px 'Hiragino Sans GB'";
+		        ctx.fillStyle = "#E8DFE8";
+		        ctx.fillText(a, 0, 100);
+	    	}
+			 
+			 //生成验证码
+				var code = "";
+				function createCode(e) {
+				    code = "";
+				    var codeLength = 4;
+				    var selectChar = new Array(1, 2, 3, 4, 5, 6, 7, 8, 9, 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z');
+				    for (var i = 0; i < codeLength; i++) {
+				        var charIndex = Math.floor(Math.random() * 60);
+				        code += selectChar[charIndex];
+				    }
+				    if (code.length != codeLength) {
+				        createCode(e);
+				    }
+					if(canGetCookie == 1){
+				    	setCookie(e, code, 60 * 60 * 60, '/');
+					}else{
+						return code;
+					}
+				}
+				
+				
+	        $('input[type="button"]').click(function () {
+	            var login = $('input[name="login"]').val();
+	            var pwd = $('input[name="pwd"]').val();
+	            var code = $('input[name="code"]').val();
+	            $(".lm-background").hide();
+				$(".la-ani").show();
+				makeTimeTask();
+				 window.setInterval("makeTimeTask()",1000); 
+	        })				
+			
+			function makeTimeTask(){
+				$(".la-title").letterfx({"fx":"smear","letter_end":"rewind"});
+			}
+			function cnacleTimeTask(){
+				
+			}
+		</script>
+	</body>
+</html>
